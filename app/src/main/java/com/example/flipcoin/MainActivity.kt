@@ -1,7 +1,12 @@
 package com.example.flipcoin
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -37,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-        fun flipTheCoin(imageid: Int) {
+        /*fun flipTheCoin(imageid: Int) {
             roll_image.animate().apply{
                 duration=350
                 rotationYBy(1800f)
@@ -48,6 +53,24 @@ class MainActivity : AppCompatActivity() {
                 //roll_image.isClickable=true
 
             }.start()
-        }
+        }*/
+
+    fun flipTheCoin(imageid: Int) {
+        val oa1= ObjectAnimator.ofFloat(roll_image,"scaleX",1f,0f)
+        val oa2=ObjectAnimator.ofFloat(roll_image,"scaleX",0f,1f)
+        oa1.interpolator= DecelerateInterpolator()
+        oa2.interpolator= AccelerateDecelerateInterpolator()
+        oa1.addListener(object : AnimatorListenerAdapter(){
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                roll_image.setImageResource(imageid)
+                oa2.start()
+            }
+        })
+        oa1.start()
+        oa1.setDuration(100)
+        oa2.setDuration(100)
+    }
+
 
 }
